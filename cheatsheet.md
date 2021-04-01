@@ -91,6 +91,29 @@ List of commands for several tools
 
 `terraform apply plan[.<modulename>].out`
 
+
+## Commands for Git
+
+### Revert branch to specific commit
+
+`git reset --hard <commit-hash>`
+
+`git push -f origin master`
+### Change commit message
+`git commit --amend`
+### Change commits author name / email address
+`git commit --amend --author "Your Name <your_email@address.com>" --no-edit`
+
+`git rebase --continue`
+
+### Change / Sqash commit messages
+
+`git rebase --interactive <commit-hash>`
+
+replace all commits from `pick` to `sqash` to remove the messages
+
+add a new commit message
+
 ## Commands for MySQL
 
 ### Processlist with watch
