@@ -52,6 +52,21 @@ List of commands for several tools
 ### docker remove all unused images not only dangling ones
 `docker image prune -a`
 
+### docker remove image from registry via curl
+
+```
+registry='<registry host>'
+name='<image name>'
+auth='-u <username>:<password>'
+tag='<tag>'
+curl $auth -X DELETE -sI -k "https://${registry}/v2/${name}/manifests/$(
+  curl $auth -sI -k \
+    -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+    "https://${registry}/v2/${name}/manifests/${tag}" \
+    | tr -d '\r' | sed -En 's/^Docker-Content-Digest: (.*)/\1/pi'
+)"
+```
+
 ## Commands for Kubernetes
 
 ### kubectl apply / delete / diff
