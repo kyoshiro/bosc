@@ -146,3 +146,9 @@ add a new commit message
 ### Show status of engine InnoDB, e.g. for deadlock Info:
 `show engine innodb status`
 
+### Sed Operations, e.g. replace in all files:
+`find . -exec sed -i -e 's/querytext/replacetext/g' {} \;`
+
+### Oneliner for git glab operations:
+`for dir in (ls); cd $dir && git st | grep "v1" && git co main && git co . && glab release create 2.0.0 -N "- [+] Migration from shared modules" && cd .. || cd ..; end`
+`for dir in (ls); echo $dir && cd $dir && glab release create 1.0.0 -N "- [+] Migration from shared modules" && cd .. || cd ..; end`
