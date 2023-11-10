@@ -1,4 +1,4 @@
-# Cheatsheet 
+# Cheatsheet
 
 List of commands for several tools
 
@@ -131,6 +131,10 @@ add a new commit message
 
 ## Commands for MySQL
 
+### Processlist with dump to file for further analysis
+`mysql -u sqladmin -h dtor22-s1-mysqldb.mysql.database.azure.com -p -e "SHOW PROCESSLIST" | tee process_list.txt`
+`mysql -u sqladmin -h dtor22-s1-mysqldb.mysql.database.azure.com -p -e "select count(host), user, command from information_schema.processlist group by user, command;" | tee process_list.txt`
+
 ### Processlist with watch
 `watch 'mysql -e "show full processlist;"'`
 
@@ -152,3 +156,14 @@ add a new commit message
 ### Oneliner for git glab operations:
 `for dir in (ls); cd $dir && git st | grep "v1" && git co main && git co . && glab release create 2.0.0 -N "- [+] Migration from shared modules" && cd .. || cd ..; end`
 `for dir in (ls); echo $dir && cd $dir && glab release create 1.0.0 -N "- [+] Migration from shared modules" && cd .. || cd ..; end`
+
+## Clear DNS cache on Mac
+
+`sudo dscacheutil -flushcache`
+
+## Filter Accesslog and show IPs:
+`grep "<somefilter_e.g._date>" access.log | awk '{print $1}' | sort -n | uniq -c | sort -n | tail -3`
+
+## IP Filtering with iptables:
+Insert: `iptables -I INPUT -s 123.45.6.7 -j DROP`
+Delete: `iptables -D INPUT -s 123.45.6.7 -j DROP`
