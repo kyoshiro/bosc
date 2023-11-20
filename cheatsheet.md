@@ -129,6 +129,12 @@ replace all commits from `pick` to `sqash` to remove the messages
 
 add a new commit message
 
+### Change History username / email on bulk
+
+replace  NEW_NAME, NEW_EMAIL_ADDRESS, OLD_NAME, OLD_EMAIL_ADDRESS
+
+`git filter-branch -f --env-filter "GIT_AUTHOR_NAME='NEW_NAME'; GIT_AUTHOR_EMAIL='NEW_EMAIL_ADDRESS'; GIT_COMMITTER_NAME='OLD_NAME'; GIT_COMMITTER_EMAIL='OLD_EMAIL_ADDRESS';" HEAD`
+
 ## Commands for MySQL
 
 ### Processlist with dump to file for further analysis
