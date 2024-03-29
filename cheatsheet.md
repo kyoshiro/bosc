@@ -173,3 +173,34 @@ replace  NEW_NAME, NEW_EMAIL_ADDRESS, OLD_NAME, OLD_EMAIL_ADDRESS
 ## IP Filtering with iptables:
 Insert: `iptables -I INPUT -s 123.45.6.7 -j DROP`
 Delete: `iptables -D INPUT -s 123.45.6.7 -j DROP`
+
+## RAID configuration:
+
+### Create SSD/HHD raid configuration with sda3 (ssd) as read prefered and sdb3 (hdd) write behind for redundancy
+`mdadm --create /dev/md0 -level=1 -raid-disks=2 --bitmap=internal /dev/sda3 --write-behind --write-mostly /dev/sdb3`
+
+### Create raid from existing drive with one drive missing at beginning
+
+`mdadm --create /dev/md3 --level=1 --raid-disks=2 /dev/sdb3 missing`
+
+### Examine raid status
+
+`cat /proc/mdstat`
+`mdadm --detail /dev/md0`
+`mdadm –examine –scan`
+
+### Remove old raid superblock from raid drive/partition
+
+`mdadm –zero-superblock /dev/sdb3`
+
+### Add drive to raid for resync
+
+`mdadm –add /dev/md0 /dev/sdb3`
+
+### Change write-behind and write-mostly status of raid disk
+
+`echo writemostly > /sys/block/md0/md/dev-sdb3/state`
+`echo writebehind > /sys/block/md0/md/dev-sdb3/state`
+
+`echo -writemostly > /sys/block/md0/md/dev-sdb3/state`
+`echo -writebehind > /sys/block/md0/md/dev-sdb3/state`
