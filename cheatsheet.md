@@ -188,6 +188,7 @@ Delete: `iptables -D INPUT -s 123.45.6.7 -j DROP`
 `cat /proc/mdstat`
 `mdadm --detail /dev/md0`
 `mdadm –examine –scan`
+`lsblk`
 
 ### Remove old raid superblock from raid drive/partition
 
