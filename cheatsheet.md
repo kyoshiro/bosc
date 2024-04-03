@@ -174,6 +174,24 @@ replace  NEW_NAME, NEW_EMAIL_ADDRESS, OLD_NAME, OLD_EMAIL_ADDRESS
 Insert: `iptables -I INPUT -s 123.45.6.7 -j DROP`
 Delete: `iptables -D INPUT -s 123.45.6.7 -j DROP`
 
+### Calculate Subnets:
+
+cidrsubnet(prefix, newbits, netnum)
+
+newbits -> extend subnetmask, e.g. /16 + newbits of 4, -> /20
+
+netnum -> factor for subnet starting ip, e.g.:
+base net: 10.0.0.0/16
+newbits: 4
+subnet calculated: 10.0.0.0/20
+netnum: 4
+new subnet position calculated: 10.0.64.0/20, because each /20 has a subnet range of 4096 ips:
+first (0): 10.0.0.0/20
+second (1): 10.0.16.0/20
+third (2): 10.0.32.0/20
+fourth (3): 10.0.48.0/20
+fifth (4): 10.0.64.0/20
+
 ## RAID configuration:
 
 ### Create SSD/HHD raid configuration with sda3 (ssd) as read prefered and sdb3 (hdd) write behind for redundancy
@@ -205,3 +223,15 @@ Delete: `iptables -D INPUT -s 123.45.6.7 -j DROP`
 
 `echo -writemostly > /sys/block/md0/md/dev-sdb3/state`
 `echo -writebehind > /sys/block/md0/md/dev-sdb3/state`
+
+## NixOS commands
+
+### List generations of user
+`nix-env  --list-generations`
+
+### Remove all generations of user except current
+`nix-collect-garbage -d`
+
+### Update Channel
+`nix-channel --update; nix-env -iA nixpkgs.nix`
+
