@@ -156,6 +156,41 @@ replace  NEW_NAME, NEW_EMAIL_ADDRESS, OLD_NAME, OLD_EMAIL_ADDRESS
 ### Show status of engine InnoDB, e.g. for deadlock Info:
 `show engine innodb status`
 
+### MaxScale show status
+`show slave status;`
+
+### MaxScale rebuild replication
+
+1. Remove db_init data and binary logs on Secondary Node
+```
+#!/bin/bash
+rm -rf /db_init/*
+```
+
+2. Remove all data from db_init on Primary Node
+```
+#!/bin/bash
+target_host=IP
+rm -rf /db_init/*
+/usr/bin/mariabackup --defaults-extra-file=/root/.my.cnf --open-files-limit=65536 --backup --target-dir=/db_init/ &&
+/usr/bin/mariabackup --prepare --target-dir=/db_init/ && rsync -e "ssh -o StrictHostKeyChecking=no" -avP /db_init $target_host:/db_init
+```
+
+3. Sync db_init and binlog files from Primary Node to Secondary Node and restart replication
+```
+#!/bin/bash
+# start the script AFTER you run the script from primary node which synced the db init data
+source_node=IP
+MASTER_PASSWORD='S3Cr3T'
+systemctl stop mariadb
+rm -rf /var/lib/mysql/data/*
+mariabackup --copy-back --target-dir=/db_init/db_init/
+chown -R mysql:mysql /var/lib/mysql/data
+systemctl start mariadb
+GTID_POS=$(cat /db_init/db_init/xtrabackup_binlog_info | awk '{print $3}')
+mysql --defaults-extra-file=/root/.my.cnf -e "SET GLOBAL read_only = 1;SET GLOBAL gtid_slave_pos = '$GTID_POS';CHANGE MASTER TO MASTER_HOST='$source_node',MASTER_PORT=3306,MASTER_USER='repl',MASTER_PASSWORD='$MASTER_PASSWORD',MASTER_USE_GTID=slave_pos;START SLAVE;"
+```
+
 ### Sed Operations, e.g. replace in all files:
 `find . -exec sed -i -e 's/querytext/replacetext/g' {} \;`
 
