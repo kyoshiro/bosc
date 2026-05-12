@@ -270,3 +270,15 @@ fifth (4): 10.0.64.0/20
 ### Update Channel
 `nix-channel --update; nix-env -iA nixpkgs.nix`
 
+### NeoVim - duplicate and replace occurency in duplicated line
+:g/customer1/t. | s/customer1/customer2/g
+
+### NeoVim - remove special char ^[ till EOL
+:%s/\e.*$//g
+
+### NeoVim - duplicate content in same line
+/s/.*/& &/g
+
+### NeoVim - reduce whitespace to one per occurency
+:%s/$/ /g
+
