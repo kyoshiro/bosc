@@ -138,8 +138,8 @@ replace  NEW_NAME, NEW_EMAIL_ADDRESS, OLD_NAME, OLD_EMAIL_ADDRESS
 ## Commands for MySQL
 
 ### Processlist with dump to file for further analysis
-`mysql -u sqladmin -h dtor22-s1-mysqldb.mysql.database.azure.com -p -e "SHOW PROCESSLIST" | tee process_list.txt`
-`mysql -u sqladmin -h dtor22-s1-mysqldb.mysql.database.azure.com -p -e "select count(host), user, command from information_schema.processlist group by user, command;" | tee process_list.txt`
+`mysql -u sqladmin -h db-host.mysql.database.azure.com -p -e "SHOW PROCESSLIST" | tee process_list.txt`
+`mysql -u sqladmin -h db-host.mysql.database.azure.com -p -e "select count(host), user, command from information_schema.processlist group by user, command;" | tee process_list.txt`
 
 ### Processlist with watch
 `watch 'mysql -e "show full processlist;"'`
